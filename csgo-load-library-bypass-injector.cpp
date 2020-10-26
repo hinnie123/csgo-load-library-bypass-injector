@@ -120,11 +120,11 @@ int main()
 	if (!csgo_base)
 		return 0;
 
-	DWORD highest_trust_routine_index_address = pattern_scan(csgo_base, "39 05 ? ? ? ? 0F 8F");
+	DWORD highest_trust_routine_index_address = pattern_scan(csgo_base, "74 76 39 05 ? ? ? ?");
 	if (!highest_trust_routine_index_address)
 		return 0;
 
-	ReadProcessMemory(csgo_handle, (void*)(highest_trust_routine_index_address + 2), &highest_trust_routine_index_address, sizeof(highest_trust_routine_index_address), nullptr);
+	ReadProcessMemory(csgo_handle, (void*)(highest_trust_routine_index_address + 4), &highest_trust_routine_index_address, sizeof(highest_trust_routine_index_address), nullptr);
 	if (!highest_trust_routine_index_address)
 		return 0;
 
@@ -132,7 +132,7 @@ int main()
 
 	// Bypassing LoadLibrary mechanism
 	{
-		int new_value = 5;
+		int new_value = 0;
 		ReadProcessMemory(csgo_handle, (void*)highest_trust_routine_index_address, &old_value, sizeof(old_value), nullptr);
 		WriteProcessMemory(csgo_handle, (void*)highest_trust_routine_index_address, &new_value, sizeof(new_value), nullptr);
 	}
